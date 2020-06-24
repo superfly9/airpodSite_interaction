@@ -1,7 +1,6 @@
 (()=>{
   let yOffset=0;
   let previousTotalScroll=0;
-  
 
   const setLayout = ()=>{
 
