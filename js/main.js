@@ -29,8 +29,23 @@
   //섹션 넘버가 큰->작은 녀석이 될 때 scrollRatio값이 음수기에 scrollLoop에 enterToNewScene변수 추가
   const calcValue =(values,currentPageYOffset)=>{
     let result;
-    let scrollRatio = currentPageYOffset / infoArr[currentScene].scrollHeight;
-    
+    let sectionHeight = infoArr[currentScene].scrollHeight
+    let scrollRatio = currentPageYOffset / sectionHeight;
+    if (values.length === 3) {
+      let animationStart = sectionHeight * values[2].start;
+      let animationEnd = sectionHeight * values[2].end;
+      let animationHeight =animationEnd - animationStart;
+      if (currentPageYOffset>=animationStart && currentPageYOffset <=animationEnd) {
+        result = (currentPageYOffset-animationStart)/animationHeight * (values[1]-values[0])+values[0];
+      } else if (currentPageYOffset<animationStart) {
+        result = values[0];
+      } else {
+        console.log(scrollRatio)
+        result = values[1];
+      }
+    } else {
+      result = scrollRatio * (values[1]-values[0]) +values[0];
+    }
     return result;
   }
 
@@ -38,16 +53,22 @@
   const playAnimation =(yOffset,prevTotalScrollHeight)=>{
     const objs = infoArr[currentScene].objs;
     const values = infoArr[currentScene].values;
-    const currentPageYOffset = yOffset - prevTotalScrollHeight
+    const currentPageYOffset = yOffset - prevTotalScrollHeight;
+    const sectionScrollRatio = currentPageYOffset / infoArr[currentScene].scrollHeight;
     switch (currentScene) {
       case 0:
-        calcValue(values,currentPageYOffset);
+        const messageA_opacityIn=calcValue(values.messageA_opacityIn,currentPageYOffset);
+        const messageA_opacityOut=calcValue(values.messageA_opacityOut,currentPageYOffset);
+        if (sectionScrollRatio < 0.22) {
+          objs.messageA.style.opacity = messageA_opacityIn;
+        } else {
+          // console.log(sectionScrollRatio, 'Check!', objs.messageA.style.opacity )
+          objs.messageA.style.opacity =messageA_opacityOut;
+        } 
         break;
       case 1:
-        calcValue(values, currentPageYOffset);
         break;
       case 2:
-        calcValue(values, currentPageYOffset);
         break;
       case 3:
         break;
