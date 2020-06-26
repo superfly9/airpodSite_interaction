@@ -12,9 +12,12 @@
       image.src = `../video/001/IMG_${6726+i}.JPG`;
       infoArr[0].objs.videoImages.push(image);
     }
+    for (let i=0;i<infoArr[2].values.videoImageCount;i++) {
+      image =new Image();
+      image.src = `../video/002/IMG_${7027+i}.JPG`;
+      infoArr[2].objs.videoImages.push(image);
+    }  
   }
-  
-  setCanvas()
   
   //20200625 초기 각 섹션의 Layout을 설정,패이지 로드시 몇번째 섹션에 있는지 체크해주는 역할
   const setLayout = ()=>{
@@ -42,8 +45,9 @@
       }
     }
     //20200626 캔버스를 화면 크기에 맞춰 축소시켜주고 가운데로 위치 조정해줌
-    const canvasRatio = window.innerHeight/infoArr[currentScene].objs.canvas.height;
-    infoArr[currentScene].objs.canvas.style.transform = `translate(-50%,-50%) scale(${canvasRatio})`;
+    const canvasRatio = window.innerHeight/infoArr[0].objs.canvas.height;
+    infoArr[0].objs.canvas.style.transform = `translate(-50%,-50%) scale(${canvasRatio})`;
+    infoArr[2].objs.canvas.style.transform = `translate(-50%,-50%) scale(${canvasRatio})`;
     document.body.setAttribute('id',`show-scene-${currentScene}`)
 }
   //20200625 애니메이션 효과/현재 섹션에서 스크롤의 높이를 받는다
@@ -77,9 +81,9 @@
     const sectionScrollRatio = currentPageYOffset / infoArr[currentScene].scrollHeight;
     switch (currentScene) {
       case 0:
-        //캔버스를 창 크기에 맞춰줘야
-        const canvasImageIndex=Math.floor(calcValue(values.imageSequence,currentPageYOffset));
-        objs.context.drawImage(objs.videoImages[canvasImageIndex],0,0);
+        const scene1_CanvasImageIndex=Math.floor(calcValue(values.imageSequence,currentPageYOffset));
+        objs.context.drawImage(objs.videoImages[scene1_CanvasImageIndex],0,0);
+        objs.canvas.style.opacity = calcValue(values.canvas_opacity,currentPageYOffset);
         //sectionScrollRatio / target / value / refactoring위한 변수들
         if (sectionScrollRatio < 0.22) {
           objs.messageA.style.opacity = calcValue(values.messageA_opacityIn, currentPageYOffset);
@@ -111,7 +115,11 @@
         }
         break;
       case 2:
+          const scene3_CanvasImageIndex = Math.floor(calcValue(values.imageSequence,currentPageYOffset));
+          objs.context.drawImage(objs.videoImages[scene3_CanvasImageIndex],0,0);
+      
           if (sectionScrollRatio < 0.25) {
+            objs.canvas.style.opacity = calcValue(values.canvas_opacityIn,currentPageYOffset);
             objs.messageA.style.opacity = calcValue(values.messageA_opacityIn, currentPageYOffset);
             objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateIn, currentPageYOffset)}%)`;
           } else {
@@ -129,6 +137,7 @@
             objs.messageC.style.opacity = calcValue(values.messageC_opacityIn, currentPageYOffset);
             objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateIn, currentPageYOffset)}%)`;
           } else {
+            objs.canvas.style.opacity = calcValue(values.canvas_opacityOut, currentPageYOffset);
             objs.messageC.style.opacity = calcValue(values.messageC_opacityOut, currentPageYOffset);
             objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateOut, currentPageYOffset)}%)`;
           }
@@ -158,9 +167,11 @@
     if (enterToNewScene) return;
     playAnimation(yOffset,prevTotalScrollHeight);
   }
-  
- window.addEventListener('load',()=>{
-   setLayout();
+  setCanvas();
+  window.addEventListener('load',()=>{
+    setLayout();
+    infoArr[0].objs.context.drawImage(infoArr[0].objs.videoImages[0],0,0);
+    infoArr[2].objs.context.drawImage(infoArr[2].objs.videoImages[0],0,0);
  })
  window.addEventListener('resize',setLayout);
  window.addEventListener('scroll',()=>{
