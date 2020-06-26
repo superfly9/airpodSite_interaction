@@ -30,17 +30,16 @@
   const calcValue =(values,currentPageYOffset)=>{
     let result;
     let sectionHeight = infoArr[currentScene].scrollHeight
-    let scrollRatio = currentPageYOffset / sectionHeight;
     if (values.length === 3) {
       let animationStart = sectionHeight * values[2].start;
       let animationEnd = sectionHeight * values[2].end;
       let animationHeight =animationEnd - animationStart;
+      console.log(currentPageYOffset,animationStart,animationEnd,'Good')
       if (currentPageYOffset>=animationStart && currentPageYOffset <=animationEnd) {
         result = (currentPageYOffset-animationStart)/animationHeight * (values[1]-values[0])+values[0];
       } else if (currentPageYOffset<animationStart) {
         result = values[0];
       } else {
-        console.log(scrollRatio)
         result = values[1];
       }
     } else {
@@ -57,14 +56,35 @@
     const sectionScrollRatio = currentPageYOffset / infoArr[currentScene].scrollHeight;
     switch (currentScene) {
       case 0:
-        const messageA_opacityIn=calcValue(values.messageA_opacityIn,currentPageYOffset);
-        const messageA_opacityOut=calcValue(values.messageA_opacityOut,currentPageYOffset);
+        //sectionScrollRatio / target / value
         if (sectionScrollRatio < 0.22) {
-          objs.messageA.style.opacity = messageA_opacityIn;
+          objs.messageA.style.opacity = calcValue(values.messageA_opacityIn, currentPageYOffset);
+          objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateIn, currentPageYOffset)}%)`;
         } else {
-          // console.log(sectionScrollRatio, 'Check!', objs.messageA.style.opacity )
-          objs.messageA.style.opacity =messageA_opacityOut;
-        } 
+          objs.messageA.style.opacity = calcValue(values.messageA_opacityOut, currentPageYOffset);
+          objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateOut, currentPageYOffset)}%)`;
+        }
+        if (sectionScrollRatio <0.42) {
+          objs.messageB.style.opacity = calcValue(values.messageB_opacityIn, currentPageYOffset);
+          objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateIn, currentPageYOffset)}%)`;
+        } else {
+          objs.messageB.style.opacity = calcValue(values.messageB_opacityOut, currentPageYOffset);
+          objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateOut, currentPageYOffset)}%)`;
+        }
+        if (sectionScrollRatio < 0.62) {
+          objs.messageC.style.opacity = calcValue(values.messageC_opacityIn, currentPageYOffset);
+          objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateIn, currentPageYOffset)}%)`;
+        } else {
+          objs.messageC.style.opacity = calcValue(values.messageC_opacityOut, currentPageYOffset);
+          objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateOut, currentPageYOffset)}%)`;
+        }
+        if (sectionScrollRatio < 0.82) {
+          objs.messageD.style.opacity = calcValue(values.messageD_opacityIn, currentPageYOffset);
+          objs.messageD.style.transform = `translateY(${calcValue(values.messageD_translateIn, currentPageYOffset)}%)`;
+        } else {
+          objs.messageD.style.opacity = calcValue(values.messageD_opacityOut, currentPageYOffset);
+          objs.messageD.style.transform = `translateY(${calcValue(values.messageD_translateOut, currentPageYOffset)}%)`;
+        }
         break;
       case 1:
         break;
