@@ -3,8 +3,20 @@
   let heightNumber = 5;
   let currentScene=0;
   let prevTotalScrollHeight=0;
-  //20200625 초기 각 섹션의 Layout을 설정,패이지 로드시 몇번째 섹션에 있는지 체크해주는 역할
   
+  // 20200626 이미지를 담고 있는 배열 생성
+  const setCanvas = ()=>{
+    let image;
+    for (let i=0;i<infoArr[0].values.videoImageCount;i++) {
+      image =new Image();
+      image.src = `../video/001/IMG_${6726+i}.JPG`;
+      infoArr[0].objs.videoImages.push(image);
+    }
+  }
+  
+  setCanvas()
+  
+  //20200625 초기 각 섹션의 Layout을 설정,패이지 로드시 몇번째 섹션에 있는지 체크해주는 역할
   const setLayout = ()=>{
     
     infoArr.forEach((item)=>{
@@ -29,13 +41,17 @@
         break;
       }
     }
+    //20200626 캔버스를 화면 크기에 맞춰 축소시켜주고 가운데로 위치 조정해줌
+    const canvasRatio = window.innerHeight/infoArr[currentScene].objs.canvas.height;
+    infoArr[currentScene].objs.canvas.style.transform = `translate(-50%,-50%) scale(${canvasRatio})`;
     document.body.setAttribute('id',`show-scene-${currentScene}`)
 }
   //20200625 애니메이션 효과/현재 섹션에서 스크롤의 높이를 받는다
   //섹션 넘버가 큰->작은 녀석이 될 때 scrollRatio값이 음수기에 scrollLoop에 enterToNewScene변수 추가
   const calcValue =(values,currentPageYOffset)=>{
     let result;
-    let sectionHeight = infoArr[currentScene].scrollHeight
+    let sectionHeight = infoArr[currentScene].scrollHeight;
+    let scrollRatio =currentPageYOffset/sectionHeight;
     if (values.length === 3) {
       let animationStart = sectionHeight * values[2].start;
       let animationEnd = sectionHeight * values[2].end;
@@ -61,7 +77,10 @@
     const sectionScrollRatio = currentPageYOffset / infoArr[currentScene].scrollHeight;
     switch (currentScene) {
       case 0:
-        //sectionScrollRatio / target / value
+        //캔버스를 창 크기에 맞춰줘야
+        const canvasImageIndex=Math.floor(calcValue(values.imageSequence,currentPageYOffset));
+        objs.context.drawImage(objs.videoImages[canvasImageIndex],0,0);
+        //sectionScrollRatio / target / value / refactoring위한 변수들
         if (sectionScrollRatio < 0.22) {
           objs.messageA.style.opacity = calcValue(values.messageA_opacityIn, currentPageYOffset);
           objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateIn, currentPageYOffset)}%)`;
