@@ -9,7 +9,13 @@
     
     infoArr.forEach((item)=>{
       const target = item.objs.target;
-      item.scrollHeight = window.innerHeight * heightNumber;
+      switch (item.type) {
+        case 'sticky':
+          item.scrollHeight = window.innerHeight * heightNumber;
+          break;
+        default:
+          item.scrollHeight = target.clientHeight;
+      }
       target.style.height = `${item.scrollHeight}px`
     });
     
@@ -34,7 +40,6 @@
       let animationStart = sectionHeight * values[2].start;
       let animationEnd = sectionHeight * values[2].end;
       let animationHeight =animationEnd - animationStart;
-      console.log(currentPageYOffset,animationStart,animationEnd,'Good')
       if (currentPageYOffset>=animationStart && currentPageYOffset <=animationEnd) {
         result = (currentPageYOffset-animationStart)/animationHeight * (values[1]-values[0])+values[0];
       } else if (currentPageYOffset<animationStart) {
@@ -86,9 +91,28 @@
           objs.messageD.style.transform = `translateY(${calcValue(values.messageD_translateOut, currentPageYOffset)}%)`;
         }
         break;
-      case 1:
-        break;
       case 2:
+          if (sectionScrollRatio < 0.25) {
+            objs.messageA.style.opacity = calcValue(values.messageA_opacityIn, currentPageYOffset);
+            objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateIn, currentPageYOffset)}%)`;
+          } else {
+            objs.messageA.style.opacity = calcValue(values.messageA_opacityOut, currentPageYOffset);
+            objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateOut, currentPageYOffset)}%)`;
+          }
+          if (sectionScrollRatio < 0.38) {
+            objs.messageB.style.opacity = calcValue(values.messageB_opacityIn, currentPageYOffset);
+            objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateIn, currentPageYOffset)}%)`;
+          } else {
+            objs.messageB.style.opacity = calcValue(values.messageB_opacityOut, currentPageYOffset);
+            objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateOut, currentPageYOffset)}%)`;
+          }
+          if (sectionScrollRatio < 0.68) {
+            objs.messageC.style.opacity = calcValue(values.messageC_opacityIn, currentPageYOffset);
+            objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateIn, currentPageYOffset)}%)`;
+          } else {
+            objs.messageC.style.opacity = calcValue(values.messageC_opacityOut, currentPageYOffset);
+            objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateOut, currentPageYOffset)}%)`;
+          }
         break;
       case 3:
         break;
