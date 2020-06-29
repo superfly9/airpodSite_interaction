@@ -7,7 +7,6 @@ html {
 }
 
 body {
-  overflow-x: hidden;
   color: rgb(29, 29, 31);
   letter-spacing: -0.05em;
   background: white;
@@ -74,6 +73,7 @@ a {
 
 .scroll-section {
   padding-top: 50vh;
+  position: relative;
 }
 
 #scroll-section-0 h1 {
@@ -109,6 +109,16 @@ a {
 
 #scroll-section-2 .main-message {
   font-size: 3.5rem;
+}
+
+#scroll-section-3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#scroll-section-3 canvas {
+  background-color: blue;
 }
 
 .description {

@@ -89,10 +89,14 @@
       objs: {
         target: document.querySelector('#scroll-section-3'),
         canvas: document.querySelector('.image-blend-canvas'),
-        context: document.querySelector('.image-blend-canvas').getContext('2d')
+        context: document.querySelector('.image-blend-canvas').getContext('2d'),
+        videoImages : []
       },
       values : {
-        
+        videoImageCount :2,
+        rect1X :[0,0,{start:0,end:0}],
+        rect2X :[0,0,{start:0,end:0}],
+        rectStartY :0
       }
     }
   ]

@@ -16,7 +16,12 @@
       image =new Image();
       image.src = `../video/002/IMG_${7027+i}.JPG`;
       infoArr[2].objs.videoImages.push(image);
-    }  
+    }
+    for (let i=0;i<infoArr[3].values.videoImageCount;i++) {
+      image =new Image();
+      image.src = `../images/blend-image-${i+1}.jpg`;
+      infoArr[3].objs.videoImages.push(image);
+    }
   }
   
   //20200625 초기 각 섹션의 Layout을 설정,패이지 로드시 몇번째 섹션에 있는지 체크해주는 역할
@@ -117,7 +122,7 @@
       case 2:
           const scene3_CanvasImageIndex = Math.floor(calcValue(values.imageSequence,currentPageYOffset));
           objs.context.drawImage(objs.videoImages[scene3_CanvasImageIndex],0,0);
-      
+
           if (sectionScrollRatio < 0.25) {
             objs.canvas.style.opacity = calcValue(values.canvas_opacityIn,currentPageYOffset);
             objs.messageA.style.opacity = calcValue(values.messageA_opacityIn, currentPageYOffset);
@@ -143,9 +148,56 @@
           }
         break;
       case 3:
+				const widthRatio = window.innerWidth / objs.canvas.width;
+				const heightRatio = window.innerHeight / objs.canvas.height;
+				let canvasScaleRatio;
+
+				if (widthRatio <= heightRatio) {
+					// 캔버스보다 브라우저 창이 홀쭉한 경우
+          canvasScaleRatio = heightRatio;
+          // console.log('decied HeightRatio', widthRatio, heightRatio)
+				} else {
+					// 캔버스보다 브라우저 창이 납작한 경우
+          canvasScaleRatio = widthRatio;
+          // console.log('decied WidthRatio',widthRatio,heightRatio)
+        }
+        //풀스크린시 widthRatio > heightRatio (0.75 > 0.63)임
+
+        objs.canvas.style.transform = `scale(${canvasScaleRatio})`;
+				objs.context.drawImage(objs.videoImages[0], 0, 0);
+				objs.context.fillStyle = 'white';
+
+        // 캔버스 사이즈에 맞춰 가정한 innerWidth와 innerHeight
+				const recalculatedInnerWidth = document.body.offsetWidth / canvasScaleRatio;
+        const recalculatedInnerHeight = window.innerHeight / canvasScaleRatio;
+        const whiteRectWidth = recalculatedInnerWidth * 0.15;
+        	if (!values.rectStartY) {
+        	  values.rectStartY = objs.canvas.offsetTop + (objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2;
+        	  values.rect1X[2].start = (window.innerHeight / 2) / infoArr[currentScene].scrollHeight;
+        	  values.rect2X[2].start = (window.innerHeight / 2) / infoArr[currentScene].scrollHeight;
+        	  values.rect1X[2].end = values.rectStartY / infoArr[currentScene].scrollHeight;
+            values.rect2X[2].end = values.rectStartY / infoArr[currentScene].scrollHeight;
+        	}
+        values.rect1X[0] = (objs.canvas.width -recalculatedInnerWidth)/2;
+        values.rect1X[1] = values.rect1X[0] - whiteRectWidth;
+        values.rect2X[0] = values.rect1X[0] + recalculatedInnerWidth - whiteRectWidth;
+        values.rect2X[1] = values.rect2X[0] + whiteRectWidth;
+        objs.context.fillRect(
+				  parseInt(calcValue(values.rect1X, currentPageYOffset)),
+				  0,
+				  parseInt(whiteRectWidth),
+				  objs.canvas.height
+				);
+				objs.context.fillRect(
+				  parseInt(calcValue(values.rect2X, currentPageYOffset)),
+				  0,
+				  parseInt(whiteRectWidth),
+				  objs.canvas.height
+				);
         break;
-    }
+
   }
+}
   //20200625,Scroll Action을 통해 활성화될 신을 결정+스크롤 액션마다 애니메이션 실행시키는 함수
   function scrollLoop() {
     let enterToNewScene = false;
@@ -153,6 +205,10 @@
     for (let i = 0;i<currentScene;i++) {
       prevTotalScrollHeight += infoArr[i].scrollHeight;
     }
+    /*페이지 로드 후 이미지 로드 완료 전까지 setLayout이 다 실행되기 전에 스크롤발생해서 scrollLoop실행되면
+      167이 실행되서 infoArr[currentScene].scrollHeight가 초기값인 0으로만 뜨는 현상 발생
+      로드가 다 된 후 스크롤 되게 해야할듯
+    */
     if (yOffset > prevTotalScrollHeight + infoArr[currentScene].scrollHeight) {
       currentScene++; 
       enterToNewScene=true;
