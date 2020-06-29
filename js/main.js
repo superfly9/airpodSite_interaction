@@ -57,26 +57,7 @@
 }
   //20200625 애니메이션 효과/현재 섹션에서 스크롤의 높이를 받는다
   //섹션 넘버가 큰->작은 녀석이 될 때 scrollRatio값이 음수기에 scrollLoop에 enterToNewScene변수 추가
-  const calcValue =(values,currentPageYOffset)=>{
-    let result;
-    let sectionHeight = infoArr[currentScene].scrollHeight;
-    let scrollRatio =currentPageYOffset/sectionHeight;
-    if (values.length === 3) {
-      let animationStart = sectionHeight * values[2].start;
-      let animationEnd = sectionHeight * values[2].end;
-      let animationHeight =animationEnd - animationStart;
-      if (currentPageYOffset>=animationStart && currentPageYOffset <=animationEnd) {
-        result = (currentPageYOffset-animationStart)/animationHeight * (values[1]-values[0])+values[0];
-      } else if (currentPageYOffset<animationStart) {
-        result = values[0];
-      } else {
-        result = values[1];
-      }
-    } else {
-      result = scrollRatio * (values[1]-values[0]) +values[0];
-    }
-    return result;
-  }
+
 
   //20200625 애니메이션 종류/해당 섹션의 스크롤 비율 따라 다른 애니메이션을 실행시키는 함수,scrollLoop 실행시마다 같이 실행
   const playAnimation =(yOffset,prevTotalScrollHeight)=>{
@@ -86,68 +67,69 @@
     const sectionScrollRatio = currentPageYOffset / infoArr[currentScene].scrollHeight;
     switch (currentScene) {
       case 0:
-        const scene1_CanvasImageIndex=Math.floor(calcValue(values.imageSequence,currentPageYOffset));
+        const scene1_CanvasImageIndex=Math.floor(calcValue(values.imageSequence,currentPageYOffset,currentScene));
         objs.context.drawImage(objs.videoImages[scene1_CanvasImageIndex],0,0);
-        objs.canvas.style.opacity = calcValue(values.canvas_opacity,currentPageYOffset);
+        objs.canvas.style.opacity = calcValue(values.canvas_opacity,currentPageYOffset,currentScene);
         //sectionScrollRatio / target / value / refactoring위한 변수들
         if (sectionScrollRatio < 0.22) {
-          objs.messageA.style.opacity = calcValue(values.messageA_opacityIn, currentPageYOffset);
-          objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateIn, currentPageYOffset)}%)`;
+          objs.messageA.style.opacity = calcValue(values.messageA_opacityIn, currentPageYOffset,currentScene);
+          objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateIn, currentPageYOffset,currentScene)}%)`;
         } else {
-          objs.messageA.style.opacity = calcValue(values.messageA_opacityOut, currentPageYOffset);
-          objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateOut, currentPageYOffset)}%)`;
+          objs.messageA.style.opacity = calcValue(values.messageA_opacityOut, currentPageYOffset,currentScene);
+          objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateOut, currentPageYOffset,currentScene)}%)`;
         }
         if (sectionScrollRatio <0.42) {
-          objs.messageB.style.opacity = calcValue(values.messageB_opacityIn, currentPageYOffset);
-          objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateIn, currentPageYOffset)}%)`;
+          objs.messageB.style.opacity = calcValue(values.messageB_opacityIn, currentPageYOffset,currentScene);
+          objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateIn, currentPageYOffset,currentScene)}%)`;
         } else {
-          objs.messageB.style.opacity = calcValue(values.messageB_opacityOut, currentPageYOffset);
-          objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateOut, currentPageYOffset)}%)`;
+          objs.messageB.style.opacity = calcValue(values.messageB_opacityOut, currentPageYOffset,currentScene);
+          objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateOut, currentPageYOffset,currentScene)}%)`;
         }
         if (sectionScrollRatio < 0.62) {
-          objs.messageC.style.opacity = calcValue(values.messageC_opacityIn, currentPageYOffset);
-          objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateIn, currentPageYOffset)}%)`;
+          objs.messageC.style.opacity = calcValue(values.messageC_opacityIn, currentPageYOffset,currentScene);
+          objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateIn, currentPageYOffset,currentScene)}%)`;
         } else {
-          objs.messageC.style.opacity = calcValue(values.messageC_opacityOut, currentPageYOffset);
-          objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateOut, currentPageYOffset)}%)`;
+          objs.messageC.style.opacity = calcValue(values.messageC_opacityOut, currentPageYOffset,currentScene);
+          objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateOut, currentPageYOffset,currentScene)}%)`;
         }
         if (sectionScrollRatio < 0.82) {
-          objs.messageD.style.opacity = calcValue(values.messageD_opacityIn, currentPageYOffset);
-          objs.messageD.style.transform = `translateY(${calcValue(values.messageD_translateIn, currentPageYOffset)}%)`;
+          objs.messageD.style.opacity = calcValue(values.messageD_opacityIn, currentPageYOffset,currentScene);
+          objs.messageD.style.transform = `translateY(${calcValue(values.messageD_translateIn, currentPageYOffset,currentScene)}%)`;
         } else {
-          objs.messageD.style.opacity = calcValue(values.messageD_opacityOut, currentPageYOffset);
-          objs.messageD.style.transform = `translateY(${calcValue(values.messageD_translateOut, currentPageYOffset)}%)`;
+          objs.messageD.style.opacity = calcValue(values.messageD_opacityOut, currentPageYOffset,currentScene);
+          objs.messageD.style.transform = `translateY(${calcValue(values.messageD_translateOut, currentPageYOffset,currentScene)}%)`;
         }
         break;
       case 2:
-          const scene3_CanvasImageIndex = Math.floor(calcValue(values.imageSequence,currentPageYOffset));
+          const scene3_CanvasImageIndex = Math.floor(calcValue(values.imageSequence,currentPageYOffset,currentScene));
           objs.context.drawImage(objs.videoImages[scene3_CanvasImageIndex],0,0);
 
           if (sectionScrollRatio < 0.25) {
-            objs.canvas.style.opacity = calcValue(values.canvas_opacityIn,currentPageYOffset);
-            objs.messageA.style.opacity = calcValue(values.messageA_opacityIn, currentPageYOffset);
-            objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateIn, currentPageYOffset)}%)`;
+            objs.canvas.style.opacity = calcValue(values.canvas_opacityIn,currentPageYOffset,currentScene);
+            objs.messageA.style.opacity = calcValue(values.messageA_opacityIn, currentPageYOffset,currentScene);
+            objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateIn, currentPageYOffset,currentScene)}%)`;
           } else {
-            objs.messageA.style.opacity = calcValue(values.messageA_opacityOut, currentPageYOffset);
-            objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateOut, currentPageYOffset)}%)`;
+            objs.messageA.style.opacity = calcValue(values.messageA_opacityOut, currentPageYOffset,currentScene);
+            objs.messageA.style.transform = `translateY(${calcValue(values.messageA_translateOut, currentPageYOffset,currentScene)}%)`;
           }
           if (sectionScrollRatio < 0.38) {
-            objs.messageB.style.opacity = calcValue(values.messageB_opacityIn, currentPageYOffset);
-            objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateIn, currentPageYOffset)}%)`;
+            objs.messageB.style.opacity = calcValue(values.messageB_opacityIn, currentPageYOffset,currentScene);
+            objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateIn, currentPageYOffset,currentScene)}%)`;
           } else {
-            objs.messageB.style.opacity = calcValue(values.messageB_opacityOut, currentPageYOffset);
-            objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateOut, currentPageYOffset)}%)`;
+            objs.messageB.style.opacity = calcValue(values.messageB_opacityOut, currentPageYOffset,currentScene);
+            objs.messageB.style.transform = `translateY(${calcValue(values.messageB_translateOut, currentPageYOffset,currentScene)}%)`;
           }
           if (sectionScrollRatio < 0.68) {
-            objs.messageC.style.opacity = calcValue(values.messageC_opacityIn, currentPageYOffset);
-            objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateIn, currentPageYOffset)}%)`;
+            objs.messageC.style.opacity = calcValue(values.messageC_opacityIn, currentPageYOffset,currentScene);
+            objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateIn, currentPageYOffset,currentScene)}%)`;
           } else {
-            objs.canvas.style.opacity = calcValue(values.canvas_opacityOut, currentPageYOffset);
-            objs.messageC.style.opacity = calcValue(values.messageC_opacityOut, currentPageYOffset);
-            objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateOut, currentPageYOffset)}%)`;
+            objs.canvas.style.opacity = calcValue(values.canvas_opacityOut, currentPageYOffset,currentScene);
+            objs.messageC.style.opacity = calcValue(values.messageC_opacityOut, currentPageYOffset,currentScene);
+            objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateOut, currentPageYOffset,currentScene)}%)`;
           }
         break;
       case 3:
+        const scrollHeight =infoArr[currentScene].scrollHeight;
 				const widthRatio = window.innerWidth / objs.canvas.width;
 				const heightRatio = window.innerHeight / objs.canvas.height;
 				let canvasScaleRatio;
@@ -163,7 +145,7 @@
         }
         //풀스크린시 widthRatio > heightRatio (0.75 > 0.63)임
 
-        objs.canvas.style.transform = `scale(${canvasScaleRatio})`;
+        objs.canvas.style.transform = `scale(${heightRatio})`;
 				objs.context.drawImage(objs.videoImages[0], 0, 0);
 				objs.context.fillStyle = 'white';
 
@@ -173,23 +155,23 @@
         const whiteRectWidth = recalculatedInnerWidth * 0.15;
         	if (!values.rectStartY) {
         	  values.rectStartY = objs.canvas.offsetTop + (objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2;
-        	  values.rect1X[2].start = (window.innerHeight / 2) / infoArr[currentScene].scrollHeight;
-        	  values.rect2X[2].start = (window.innerHeight / 2) / infoArr[currentScene].scrollHeight;
-        	  values.rect1X[2].end = values.rectStartY / infoArr[currentScene].scrollHeight;
-            values.rect2X[2].end = values.rectStartY / infoArr[currentScene].scrollHeight;
+        	  values.rect1X[2].start = (window.innerHeight / 2) / scrollHeight;
+        	  values.rect2X[2].start = (window.innerHeight / 2) / scrollHeight;
+        	  values.rect1X[2].end = values.rectStartY / scrollHeight;
+            values.rect2X[2].end = values.rectStartY / scrollHeight;
         	}
         values.rect1X[0] = (objs.canvas.width -recalculatedInnerWidth)/2;
         values.rect1X[1] = values.rect1X[0] - whiteRectWidth;
         values.rect2X[0] = values.rect1X[0] + recalculatedInnerWidth - whiteRectWidth;
         values.rect2X[1] = values.rect2X[0] + whiteRectWidth;
         objs.context.fillRect(
-				  parseInt(calcValue(values.rect1X, currentPageYOffset)),
+				  parseInt(calcValue(values.rect1X, currentPageYOffset,currentScene)),
 				  0,
 				  parseInt(whiteRectWidth),
 				  objs.canvas.height
 				);
 				objs.context.fillRect(
-				  parseInt(calcValue(values.rect2X, currentPageYOffset)),
+				  parseInt(calcValue(values.rect2X, currentPageYOffset,currentScene)),
 				  0,
 				  parseInt(whiteRectWidth),
 				  objs.canvas.height
