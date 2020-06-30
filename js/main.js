@@ -64,7 +64,8 @@
     const objs = infoArr[currentScene].objs;
     const values = infoArr[currentScene].values;
     const currentPageYOffset = yOffset - prevTotalScrollHeight;
-    const sectionScrollRatio = currentPageYOffset / infoArr[currentScene].scrollHeight;
+    let scrollHeight = infoArr[currentScene].scrollHeight;
+    const sectionScrollRatio = currentPageYOffset / scrollHeight;
     switch (currentScene) {
       case 0:
         const scene1_CanvasImageIndex=Math.floor(calcValue(values.imageSequence,currentPageYOffset,currentScene));
@@ -127,25 +128,59 @@
             objs.messageC.style.opacity = calcValue(values.messageC_opacityOut, currentPageYOffset,currentScene);
             objs.messageC.style.transform = `translateY(${calcValue(values.messageC_translateOut, currentPageYOffset,currentScene)}%)`;
           }
+          //2번이 끝나갈때쯤 캔버스 그려주기
+          if (sectionScrollRatio>0.9) {
+            const objs = infoArr[3].objs;
+            const values = infoArr[3].values;
+            const widthRatio = window.innerWidth / objs.canvas.width;
+            const heightRatio = window.innerHeight / objs.canvas.height;
+
+            let canvasScaleRatio;
+            if (widthRatio <= heightRatio) {
+              canvasScaleRatio = heightRatio;
+            } else {
+              canvasScaleRatio =widthRatio;
+            }
+            objs.canvas.style.transform = `scale(${canvasScaleRatio})`;
+            objs.context.fillStyle = 'white';
+            objs.context.drawImage(objs.videoImages[0], 0, 0);
+            const recalculatedInnerWidth = document.body.offsetWidth / canvasScaleRatio;
+            const whiteRectWidth = recalculatedInnerWidth * 0.15;
+            values.rect1X[0] = (objs.canvas.width - recalculatedInnerWidth) / 2;
+            values.rect1X[1] = values.rect1X[0] - whiteRectWidth;
+            values.rect2X[0] = values.rect1X[0] + recalculatedInnerWidth - whiteRectWidth;
+            values.rect2X[1] = values.rect2X[0] + whiteRectWidth;
+            objs.context.fillRect(
+              parseInt(values.rect1X[0]),
+              0,
+              parseInt(whiteRectWidth),
+              objs.canvas.height
+            );
+            objs.context.fillRect(
+              parseInt(values.rect2X[0]),
+              0,
+              parseInt(whiteRectWidth),
+              objs.canvas.height
+            );
+            
+          }
         break;
       case 3:
-        const scrollHeight =infoArr[currentScene].scrollHeight;
-				const widthRatio = window.innerWidth / objs.canvas.width;
-				const heightRatio = window.innerHeight / objs.canvas.height;
-				let canvasScaleRatio;
+        const widthRatio = window.innerWidth / objs.canvas.width;
+        const heightRatio = window.innerHeight / objs.canvas.height;
+        
+        let canvasScaleRatio;
 
 				if (widthRatio <= heightRatio) {
 					// 캔버스보다 브라우저 창이 홀쭉한 경우
           canvasScaleRatio = heightRatio;
-          // console.log('decied HeightRatio', widthRatio, heightRatio)
 				} else {
 					// 캔버스보다 브라우저 창이 납작한 경우
           canvasScaleRatio = widthRatio;
-          // console.log('decied WidthRatio',widthRatio,heightRatio)
         }
         //풀스크린시 widthRatio > heightRatio (0.75 > 0.63)임
 
-        objs.canvas.style.transform = `scale(${heightRatio})`;
+        objs.canvas.style.transform = `scale(${canvasScaleRatio})`;
 				objs.context.drawImage(objs.videoImages[0], 0, 0);
 				objs.context.fillStyle = 'white';
 
@@ -175,7 +210,25 @@
 				  0,
 				  parseInt(whiteRectWidth),
 				  objs.canvas.height
-				);
+        );
+        let blendAnimationStep=0;
+        if (sectionScrollRatio < values.rect2X[2].end) {
+          step = 1;
+          objs.canvas.classList.remove('sticky');
+        } else {
+          step = 2;
+          values.blendHeight[0]=0;
+          values.blendHeight[1]=objs.canvas.height;
+          values.blendHeight[2].start=values.rect1X[2].end;
+          values.blendHeight[2].end  =values.blendHeight[2].start + 0.3;
+          const blendHeight = calcValue(values.blendHeight,currentPageYOffset,currentScene);
+          console.log(blendHeight,'blendHeight',values.blendHeight)
+          //blendHeight = [0,1080,{start :0.22 ,end:0.42}]
+          objs.context.drawImage(objs.videoImages[1],
+            0,objs.canvas.height-blendHeight,objs.canvas.width,blendHeight)
+          objs.canvas.classList.add('sticky');
+          objs.canvas.style.top=`-${(objs.canvas.height - objs.canvas.height* canvasScaleRatio)/2}px`
+        }
         break;
 
   }
