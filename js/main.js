@@ -219,7 +219,7 @@
           values.blendHeight[2].start=values.rect1X[2].end;
           values.blendHeight[2].end  =values.blendHeight[2].start + 0.2;
           const blendHeight = calcValue(values.blendHeight,currentPageYOffset,currentScene);
-          console.log(blendHeight,'blendHeight',values.blendHeight)
+          // console.log(blendHeight,'blendHeight',values.blendHeight)
           //blendHeight = [0,1080,{start :0.22 ,end:0.42}]
           	objs.context.drawImage(objs.videoImages[1],
 						0, objs.canvas.height - blendHeight, objs.canvas.width, blendHeight,
@@ -243,6 +243,14 @@
         }
         break;
 
+  }
+}
+const checkMenu =(yOffset)=>{
+  console.log(yOffset)
+  if (yOffset>44) {
+    document.body.classList.add('local-nav-sticky');
+  } else {
+    document.body.classList.remove('local-nav-sticky');
   }
 }
   //20200625,Scroll Action을 통해 활성화될 신을 결정+스크롤 액션마다 애니메이션 실행시키는 함수
@@ -280,5 +288,6 @@
  window.addEventListener('scroll',()=>{
    yOffset = window.pageYOffset;
    scrollLoop();
+   checkMenu(yOffset);
  })
 })();
