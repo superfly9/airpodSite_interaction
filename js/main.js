@@ -211,30 +211,35 @@
 				  parseInt(whiteRectWidth),
 				  objs.canvas.height
         );
-        let blendAnimationStep=0;
         if (sectionScrollRatio < values.rect2X[2].end) {
-          step = 1;
           objs.canvas.classList.remove('sticky');
         } else {
-          step = 2;
           values.blendHeight[0]=0;
           values.blendHeight[1]=objs.canvas.height;
           values.blendHeight[2].start=values.rect1X[2].end;
-          values.blendHeight[2].end  =values.blendHeight[2].start + 0.3;
+          values.blendHeight[2].end  =values.blendHeight[2].start + 0.2;
           const blendHeight = calcValue(values.blendHeight,currentPageYOffset,currentScene);
           console.log(blendHeight,'blendHeight',values.blendHeight)
           //blendHeight = [0,1080,{start :0.22 ,end:0.42}]
-          objs.context.drawImage(objs.videoImages[1],
-            0,objs.canvas.height-blendHeight,objs.canvas.width,blendHeight)
+          	objs.context.drawImage(objs.videoImages[1],
+						0, objs.canvas.height - blendHeight, objs.canvas.width, blendHeight,
+						0, objs.canvas.height - blendHeight, objs.canvas.width, blendHeight
+					);
           objs.canvas.classList.add('sticky');
           objs.canvas.style.top=`-${(objs.canvas.height - objs.canvas.height* canvasScaleRatio)/2}px`
         }
         if (sectionScrollRatio>values.blendHeight[2].end) {
           values.canvas_scale[0] = canvasScaleRatio;
           values.canvas_scale[1] = document.body.offsetWidth / (objs.canvas.width*1.5);
-          values.canvas_scale[2].start = values.blendHeight[2].end;
-          values.canvas_scale[2].end = values.canvas_scale[2].start + 0.3;
+          values.canvas_scale[2].start = values.blendHeight[2].end; 
+          values.canvas_scale[2].end = values.canvas_scale[2].start + 0.2;
           objs.canvas.style.transform = `scale(${calcValue(values.canvas_scale,currentPageYOffset,currentScene)})`;
+          objs.canvas.style.marginTop = 0;
+        }
+        if (sectionScrollRatio > values.canvas_scale[2].end 
+          && values.canvas_scale[2].end>0) {
+            objs.canvas.classList.remove('sticky');
+            objs.canvas.style.marginTop = `${scrollHeight * 0.4}px`
         }
         break;
 
