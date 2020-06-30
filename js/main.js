@@ -229,6 +229,13 @@
           objs.canvas.classList.add('sticky');
           objs.canvas.style.top=`-${(objs.canvas.height - objs.canvas.height* canvasScaleRatio)/2}px`
         }
+        if (sectionScrollRatio>values.blendHeight[2].end) {
+          values.canvas_scale[0] = canvasScaleRatio;
+          values.canvas_scale[1] = document.body.offsetWidth / (objs.canvas.width*1.5);
+          values.canvas_scale[2].start = values.blendHeight[2].end;
+          values.canvas_scale[2].end = values.canvas_scale[2].start + 0.3;
+          objs.canvas.style.transform = `scale(${calcValue(values.canvas_scale,currentPageYOffset,currentScene)})`;
+        }
         break;
 
   }
