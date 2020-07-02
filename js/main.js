@@ -185,9 +185,10 @@
 				objs.context.fillStyle = 'white';
 
         // 캔버스 사이즈에 맞춰 가정한 innerWidth와 innerHeight
-				const recalculatedInnerWidth = document.body.offsetWidth / canvasScaleRatio;
-        const recalculatedInnerHeight = window.innerHeight / canvasScaleRatio;
+				const recalculatedInnerWidth = innerWidth / canvasScaleRatio;
         const whiteRectWidth = recalculatedInnerWidth * 0.15;
+        // alert(`${document.body.offsetWidth}vs${recalculatedInnerWidth}vs${whiteRectWidth} ${widthRatio} ${heightRatio}`);
+        // FullScrenn  :   1425 , 1900, 285 , 0.75 , 0.63
         	if (!values.rectStartY) {
         	  values.rectStartY = objs.canvas.offsetTop + (objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2;
         	  values.rect1X[2].start = (window.innerHeight / 2) / scrollHeight;
@@ -199,6 +200,9 @@
         values.rect1X[1] = values.rect1X[0] - whiteRectWidth;
         values.rect2X[0] = values.rect1X[0] + recalculatedInnerWidth - whiteRectWidth;
         values.rect2X[1] = values.rect2X[0] + whiteRectWidth;
+        // alert(`${values.rect1X} ${values.rect2X}`);
+        //fullScren 1X =>10,-275 2x=>1625,1910
+      
         objs.context.fillRect(
 				  parseInt(calcValue(values.rect1X, currentPageYOffset,currentScene)),
 				  0,
@@ -211,7 +215,7 @@
 				  parseInt(whiteRectWidth),
 				  objs.canvas.height
         );
-        if (sectionScrollRatio < values.rect2X[2].end) {
+        if (sectionScrollRatio < values.rect2X[2].end && values.rect2X[2].end >0) {
           objs.canvas.classList.remove('sticky');
         } else {
           values.blendHeight[0]=0;
@@ -228,25 +232,28 @@
           objs.canvas.classList.add('sticky');
           objs.canvas.style.top=`-${(objs.canvas.height - objs.canvas.height* canvasScaleRatio)/2}px`
         }
-        if (sectionScrollRatio>values.blendHeight[2].end) {
+        if (sectionScrollRatio > values.blendHeight[2].end && values.blendHeight[2].end >0) {
           values.canvas_scale[0] = canvasScaleRatio;
           values.canvas_scale[1] = document.body.offsetWidth / (objs.canvas.width*1.5);
           values.canvas_scale[2].start = values.blendHeight[2].end; 
           values.canvas_scale[2].end = values.canvas_scale[2].start + 0.2;
           objs.canvas.style.transform = `scale(${calcValue(values.canvas_scale,currentPageYOffset,currentScene)})`;
           objs.canvas.style.marginTop = 0;
+          console.log('Remove Margin',sectionScrollRatio,values.blendHeight[2].end)
         }
         if (sectionScrollRatio > values.canvas_scale[2].end 
           && values.canvas_scale[2].end>0) {
+          console.log('ADded Margin', sectionScrollRatio, values.canvas_scale[2].end)
             objs.canvas.classList.remove('sticky');
             objs.canvas.style.marginTop = `${scrollHeight * 0.4}px`
+            // values.canvas_opacity[2].start='';
+            // values.canvas_opacity[2].end = '';
         }
         break;
 
   }
 }
 const checkMenu =(yOffset)=>{
-  console.log(yOffset)
   if (yOffset>44) {
     document.body.classList.add('local-nav-sticky');
   } else {
