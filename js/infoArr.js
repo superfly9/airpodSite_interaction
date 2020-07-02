@@ -90,6 +90,7 @@
         target: document.querySelector('#scroll-section-3'),
         canvas: document.querySelector('.image-blend-canvas'),
         context: document.querySelector('.image-blend-canvas').getContext('2d'),
+        canvasCaption : document.querySelector('.canvas-caption'),
         videoImages : []
       },
       values : {
@@ -100,7 +101,7 @@
         canvas_scale :[0,0,{start:0,end:0}],
         rectStartY :0,
         canvasCaption_opacity :[0,1,{start:0,end:0}],
-        canvasCaption_translateY :[20,0,{start:0,end:0}]
+        canvasCaption_translateY :[30,0,{start:0,end:0}]
       }
     }
   ]

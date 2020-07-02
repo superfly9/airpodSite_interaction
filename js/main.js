@@ -239,15 +239,19 @@
           values.canvas_scale[2].end = values.canvas_scale[2].start + 0.2;
           objs.canvas.style.transform = `scale(${calcValue(values.canvas_scale,currentPageYOffset,currentScene)})`;
           objs.canvas.style.marginTop = 0;
-          console.log('Remove Margin',sectionScrollRatio,values.blendHeight[2].end)
         }
         if (sectionScrollRatio > values.canvas_scale[2].end 
           && values.canvas_scale[2].end>0) {
-          console.log('ADded Margin', sectionScrollRatio, values.canvas_scale[2].end)
             objs.canvas.classList.remove('sticky');
             objs.canvas.style.marginTop = `${scrollHeight * 0.4}px`
-            // values.canvas_opacity[2].start='';
-            // values.canvas_opacity[2].end = '';
+            values.canvasCaption_opacity[2].start = values.canvas_scale[2].end;
+            values.canvasCaption_opacity[2].end = values.canvasCaption_opacity[2].start + 0.1;
+            objs.canvasCaption.style.opacity = calcValue(values.canvasCaption_opacity,currentPageYOffset,currentScene);
+            
+            values.canvasCaption_translateY[2].start = values.canvasCaption_opacity[2].start;
+            values.canvasCaption_translateY[2].end = values.canvasCaption_opacity[2].end;
+            console.log(calcValue(values.canvasCaption_translateY, currentPageYOffset, currentScene))
+            objs.canvasCaption.style.transform = `translateY(${calcValue(values.canvasCaption_translateY, currentPageYOffset, currentScene)}%)`;
         }
         break;
 
