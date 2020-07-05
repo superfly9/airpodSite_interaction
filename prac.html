@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      height: 500vh;
+    }
+    .box {
+      position: fixed;
+      top:100px;
+      left:0;
+      width:0;
+      height: 100px;
+      background-color: orange;
+    }
+  </style>
+</head>
+<body>
+  <div class="box"></div>
+</body>
+<script>
+  const box = document.querySelector('.box');
+  let acc = 0.1;
+  let delayedYOffset = 0;
+  let rafId;
+  let rafState;
+  window.addEventListener('scroll',()=>{
+    if (!rafState) {
+      console.log('start again');
+      rafState= true;
+      rafId = requestAnimationFrame(loop)
+    }
+  })
+  const loop=()=>{
+    delayedYOffset = delayedYOffset + (pageYOffset - delayedYOffset) * acc;
+    box.style.width = `${delayedYOffset}px`;
+    rafId = requestAnimationFrame(loop);
+    console.log(pageYOffset,delayedYOffset,'differ:',Math.abs(pageYOffset-delayedYOffset))
+    if (Math.abs(pageYOffset - delayedYOffset)<1) {
+      cancelAnimationFrame(rafId);
+      rafState=false;
+    }
+  }
+  loop()
+</script>
+</html>
