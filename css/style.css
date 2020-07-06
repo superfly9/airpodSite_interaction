@@ -122,9 +122,6 @@ a {
   flex-direction: column;
   align-items: center;
 }
-#scroll-section-3 canvas {
-  background-color: blue;
-}
 
 .description {
   max-width: 1000px;
