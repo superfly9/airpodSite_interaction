@@ -115,11 +115,10 @@ const playAnimation = (currentScene,yOffset, prevTotalScrollHeight) => {
 
       objs.canvas.style.transform = `scale(${canvasScaleRatio})`;
       objs.context.drawImage(objs.videoImages[0], 0, 0);
-      console.log(objs.videoImages[0]);
       objs.context.fillStyle = 'white';
 
       // 캔버스 사이즈에 맞춰 가정한 innerWidth와 innerHeight
-      const recalculatedInnerWidth = innerWidth / canvasScaleRatio;
+      const recalculatedInnerWidth = window.innerWidth / canvasScaleRatio;
       const whiteRectWidth = recalculatedInnerWidth * 0.15;
       // alert(`${document.body.offsetWidth}vs${recalculatedInnerWidth}vs${whiteRectWidth} ${widthRatio} ${heightRatio}`);
       // FullScrenn  :   1425 , 1900, 285 , 0.75 , 0.63

@@ -75,13 +75,15 @@
       }
     })
     window.addEventListener('resize',()=>{
-      if (window.innerWidth > 600) {
+      if (window.innerWidth > 900) {
         setLayout();
+        infoArr[3].values.rectStartY = 0;
       }
-      infoArr[3].values.rectStartY = 0;
     });
     //핸드폰의 화면의 회전될 때만 layOut다시 구성
-    window.addEventListener('orientationchange',setLayout);
+    window.addEventListener('orientationchange',()=>{
+      setTimeout(setLayout,500);
+    });
   })
   setCanvas();
 })();

@@ -59,6 +59,9 @@ a {
   position: fixed;
   top:0;
   background: rgba(255, 255, 255,0.1);
+  -webkit-backdrop-filter: saturate(180%) blur(15px);
+  -moz-backdrop-filter: saturate(180%) blur(15px);
+  -o-backdrop-filter: saturate(180%) blur(15px);
   backdrop-filter: saturate(180%) blur(15px);
 }
 
@@ -83,6 +86,7 @@ a {
 .scroll-section {
   padding-top: 50vh;
   position: relative;
+  will-change: auto;
 }
 
 #scroll-section-0 h1 {
@@ -135,7 +139,7 @@ a {
 }
 .canvas-caption {
 	max-width: 1000px;
-	margin: -8rem auto 0;
+	margin: -24rem auto 0;
 	padding: 0 1rem;
 	font-size: 1.2rem;
 	color: #888;
@@ -208,8 +212,7 @@ a {
 }
 #show-scene-0 #scroll-section-0 .sticky-elem,
 #show-scene-1 #scroll-section-1 .sticky-elem,
-#show-scene-2 #scroll-section-2 .sticky-elem,
-#show-scene-3 #scroll-section-3 .sticky-elem {
+#show-scene-2 #scroll-section-2 .sticky-elem{
   display: block;
   will-change: opacity,transform;
 }
