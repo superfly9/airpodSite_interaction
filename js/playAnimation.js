@@ -6,8 +6,6 @@ const playAnimation = (currentScene,yOffset, prevTotalScrollHeight) => {
   const sectionScrollRatio = currentPageYOffset / scrollHeight;
   switch (currentScene) {
     case 0:
-      const scene1_CanvasImageIndex = Math.floor(calcValue(values.imageSequence, currentPageYOffset, currentScene));
-      objs.context.drawImage(objs.videoImages[scene1_CanvasImageIndex], 0, 0);
       objs.canvas.style.opacity = calcValue(values.canvas_opacity, currentPageYOffset, currentScene);
       //sectionScrollRatio / target / value / refactoring위한 변수들
       if (sectionScrollRatio < 0.22) {
@@ -40,9 +38,6 @@ const playAnimation = (currentScene,yOffset, prevTotalScrollHeight) => {
       }
       break;
     case 2:
-      const scene3_CanvasImageIndex = Math.floor(calcValue(values.imageSequence, currentPageYOffset, currentScene));
-      objs.context.drawImage(objs.videoImages[scene3_CanvasImageIndex], 0, 0);
-
       if (sectionScrollRatio < 0.25) {
         objs.canvas.style.opacity = calcValue(values.canvas_opacityIn, currentPageYOffset, currentScene);
         objs.messageA.style.opacity = calcValue(values.messageA_opacityIn, currentPageYOffset, currentScene);
@@ -189,7 +184,6 @@ const playAnimation = (currentScene,yOffset, prevTotalScrollHeight) => {
 
         values.canvasCaption_translateY[2].start = values.canvasCaption_opacity[2].start;
         values.canvasCaption_translateY[2].end = values.canvasCaption_opacity[2].end;
-        console.log(calcValue(values.canvasCaption_translateY, currentPageYOffset, currentScene))
         objs.canvasCaption.style.transform = `translateY(${calcValue(values.canvasCaption_translateY, currentPageYOffset, currentScene)}%)`;
       }
       break;
